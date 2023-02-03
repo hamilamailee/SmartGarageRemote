@@ -9,6 +9,11 @@
 #include <AsyncElegantOTA.h>;
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include <RCSwitch.h>
+#include <Preferences.h>
+
+RCSwitch mySwitch = RCSwitch();
+Preferences preferences;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -28,6 +33,8 @@ bool has_ssid_pass_really = false;
 bool connected_to_wifi = false;
 bool connected_to_mqtt = false;
 
+
+
 const char *ACCESS_POINT_SSID = "parking_remote";
 const char *ACCESS_POINT_PASS = "testtest";
 IPAddress local_ip(192, 168, 1, 1);
@@ -37,6 +44,9 @@ AsyncWebServer server(8080);
 
 int doorPin = D0;
 int checkPin = D1;
+
+static const uint8_t receiverPort   = 2;
+static const uint8_t transmitterPort   = 10;
 
 long startTime = 0;
 long lastMetricSent = 0;
@@ -49,6 +59,10 @@ void setup()
   Serial.println("V1.0");
   setupAP();
   setupServer();
+  preferences.begin("my-app", false); 
+  mySwitch.enableReceive(receiverPort);
+  // mySwitch.enableTransmit(transmitterPort);
+  // mySwitch.setPulseLength(352);
   pinMode(doorPin, OUTPUT);
   pinMode(checkPin, OUTPUT);
   Serial.println("Setup done");
@@ -157,6 +171,27 @@ void sendMetrics()
   delay(1000);
 }
 
+static char * dec2binWzerofill(unsigned long Dec, unsigned int bitLength) {
+  static char bin[64]; 
+  unsigned int i=0;
+
+  while (Dec > 0) {
+    bin[32+i++] = ((Dec & 1) > 0) ? '1' : '0';
+    Dec = Dec >> 1;
+  }
+
+  for (unsigned int j = 0; j< bitLength; j++) {
+    if (j >= bitLength - i) {
+      bin[j] = bin[ 31 + i - (j - (bitLength - i)) ];
+    } else {
+      bin[j] = '0';
+    }
+  }
+  bin[bitLength] = '\0';
+  
+  return bin;
+}
+
 char *getCharArrayFromString(String str)
 {
   int str_len = str.length() + 1;
@@ -213,12 +248,20 @@ void setupServer()
 
 void learn(int mode)
 {
-  // TODO: save in memory
+  if (mySwitch.available()) {
+    unsigned long decimal = mySwitch.getReceivedValue();
+    unsigned int length = mySwitch.getReceivedBitlength();
+    const char* b = dec2binWzerofill(decimal, length);
+    
+    preferences.putChar(mode, b);
+  }
 }
 
 void operate(int mode)
 {
   // TODO: read from memory
+  const char* b = preferences.getChar(mode, "000000000000000000000");
+  mySwitch.send(b);
 }
 
 void loop()
