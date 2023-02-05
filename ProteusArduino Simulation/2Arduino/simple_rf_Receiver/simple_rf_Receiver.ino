@@ -1,25 +1,38 @@
- #define datain A0
- #define ledPin 12
+/*
+  Simple example for receiving
+  
+  https://github.com/sui77/rc-switch/
+*/
 
- unsigned int temp = 0;
- const unsigned int upperThreshold = 600;
- const unsigned int lowerThreshold = 50;
+#include <RCSwitch.h>
 
- void setup()
- {
-   pinMode(ledPin, OUTPUT);
- }
+RCSwitch mySwitch = RCSwitch();
 
- void loop(){
-   temp=analogRead(datain);
-   
-    if(temp<lowerThreshold)
-    {
-     digitalWrite(ledPin, HIGH);
+void setup() {
+  Serial.begin(9600);
+  mySwitch.enableReceive(0);  // Receiver on interrupt 0 => that is pin #2
+}
+
+void loop() {
+  if (mySwitch.available()) {
+
+    int value = mySwitch.getReceivedValue();
+
+    if (value == 0) {
+      Serial.print("Unknown encoding");
+    } else {
+      Serial.print("Received ");
+      Serial.print(mySwitch.getReceivedValue());
+      Serial.print(" / ");
+      Serial.print(mySwitch.getReceivedBitlength());
+      Serial.print("bit ");
+      Serial.print("Protocol: ");
+      Serial.println(mySwitch.getReceivedProtocol());
+      digitalWrite(12, HIGH);
+      delay(100);
+      digitalWrite(12,LOW);
     }
-   
-   else if(temp>upperThreshold)
-   {
-     digitalWrite(ledPin, LOW);
-   }
- }
+
+    mySwitch.resetAvailable();
+  }
+}
