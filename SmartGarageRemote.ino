@@ -1,9 +1,7 @@
-#include <Servo.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266mDNS.h>
-// #include <ESP8266WebServer.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include <AsyncElegantOTA.h>;
@@ -14,17 +12,19 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 char *device_id;
 char *access_token;
-char *SUB_TOPIC = "cmd/";
+char *SUB_TOPIC = "/garage";
 char *sub_topic = (char *)malloc(128);
-char *PUB_TOPIC = "signal/";
+char *PUB_TOPIC = "/messages";
 char *pub_topic = (char *)malloc(128);
-char *MQTT_HOST = "94.101.176.204";
-int MQTT_PORT = 1883;
+char *MQTT_HOST = "addd6ec8.us-east-1.emqx.cloud";
+int MQTT_PORT = 15345;
+char *mqttUsername = "arduino";
+char *mqttPassword = "arduino";
 
-char *ssid;
-char *pass;
-bool has_ssid_pass = false;
-bool has_ssid_pass_really = false;
+char *ssid = "FINAPPLE";
+char *pass = "dooodeee";
+bool has_ssid_pass = true;
+bool has_ssid_pass_really = true;
 bool connected_to_wifi = false;
 bool connected_to_mqtt = false;
 
@@ -47,8 +47,9 @@ void setup()
   Serial.begin(9600);
   delay(10);
   Serial.println("V1.0");
-  setupAP();
-  setupServer();
+//  setupAP();
+//  setupServer();
+  connectToWifi();
   pinMode(doorPin, OUTPUT);
   pinMode(checkPin, OUTPUT);
   Serial.println("Setup done");
@@ -73,13 +74,11 @@ void setupAP()
 bool connectToWifi()
 {
   Serial.printf("connecting to %s %s\n", ssid, pass);
-  // if (!WiFi.config(local_ip, gateway, subnet)){Serial.println("STA Failed to configure");}
   WiFi.begin(ssid, pass);
   int i = 0;
   while (WiFi.status() != WL_CONNECTED)
   { // Wait for the Wi-Fi to connect
     delay(500);
-    //    Serial.print(++i); Serial.print(' ');
     if (i == 20)
     {
       Serial.println("Failed to connect");
@@ -111,51 +110,59 @@ void callback(char *topic, byte *payload, unsigned int length)
   {
     Serial.print(("deserializeJson() failed: "));
   }
-  if (data["signals"].containsKey("learn"))
-  {
-    int mode = data["signals"]["mode"];
-    learn(mode);
+  if (!data.containsKey("mode") || !data.containsKey("id")) {
+    sendError("Invalid json received thus ignored");
   }
-  else if (data["signals"].containsKey("operate"))
-  {
-    int mode = data["signals"]["mode"];
-    operate(mode);
+  const char* mode = data["mode"];
+  Serial.println("This is the mode you sent me dude!");
+  Serial.println(mode);
+  Serial.println("learn");
+  int id = data["id"];
+  if (strcmp(mode, "learn") == 0) {
+    learn(id);
+  } else {
+    operate(id);
   }
   return;
 }
 
 bool connectToMqtt()
 {
-  //  Serial.printf("Connecting to mqtt %s:%d\n", MQTT_HOST, MQTT_PORT);
   client.setServer(MQTT_HOST, MQTT_PORT);
   client.setCallback(callback);
-  if (!client.connect(device_id, device_id, access_token))
+  if (!client.connect(device_id, mqttUsername, mqttPassword))
   {
     Serial.println("Failed to connect to mqtt!");
     delay(1000);
     return false;
   }
-  sub_topic[0] = '\0';
-  strcat(sub_topic, SUB_TOPIC);
-  strcat(sub_topic, device_id);
-  pub_topic[0] = '\0';
-  strcat(pub_topic, PUB_TOPIC);
-  strcat(pub_topic, device_id);
-  client.subscribe(sub_topic);
-  //  Serial.println("Connected to mqtt");
+  client.subscribe(SUB_TOPIC);
+//  Serial.println("Connected to mqtt");
   return true;
 }
 
-void sendMetrics()
+void sendMessage(char* message)
 {
   DynamicJsonDocument doc(2048);
-  doc["id"] = device_id;
-  char Buf[2048];
-  serializeJson(doc, Buf);
-  client.publish(PUB_TOPIC, Buf);
-  Serial.println("Sent metrics");
-  delay(1000);
+  doc["mode"] = "message";
+  doc["message"] = message;
+  char buf[2048];
+  serializeJson(doc, buf);
+  client.publish(PUB_TOPIC, buf);
+  Serial.println("Sent message");
 }
+
+void sendError(char* message)
+{
+  DynamicJsonDocument doc(2048);
+  doc["mode"] = "error";
+  doc["message"] = message;
+  char buf[2048];
+  serializeJson(doc, buf);
+  client.publish(PUB_TOPIC, buf);
+  Serial.println("Sent message");
+}
+
 
 char *getCharArrayFromString(String str)
 {
@@ -211,14 +218,31 @@ void setupServer()
   Serial.println("Setup server done");
 }
 
-void learn(int mode)
+void learn(int id)
 {
-  // TODO: save in memory
+  Serial.print("Learning for id = ");
+  Serial.println(id);
+  if (id < 1 || id > 5) {
+    sendError("id must be between 1 and 5");
+  } else {
+    // TODO: do the actual learning
+    // TODO: save in memory
+    sendMessage("Learned");
+  }
 }
 
-void operate(int mode)
+void operate(int id)
 {
-  // TODO: read from memory
+  Serial.print("Transmitting for id = ");
+  Serial.println(id);
+  
+  if (id < 1 || id > 5) {
+    sendError("id must be between 1 and 5");
+  } else {
+    // TODO: read from memory
+    // TODO: do the actual transmitting
+    sendMessage("Sent");
+  }
 }
 
 void loop()
@@ -234,18 +258,11 @@ void loop()
   {
     Serial.println("Connecting to mqtt");
     connected_to_mqtt = connectToMqtt();
+    Serial.println("Connected to mqtt");
   }
   if (!client.connected() && connected_to_mqtt)
   {
     Serial.println("mqtt disconnected");
     connected_to_mqtt = false;
-  }
-
-  if (millis() - lastMetricSent > 3000)
-  {
-
-    if (connected_to_mqtt)
-      sendMetrics();
-    lastMetricSent = millis();
   }
 }
