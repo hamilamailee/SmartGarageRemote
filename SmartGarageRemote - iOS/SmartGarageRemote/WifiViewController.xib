@@ -88,6 +88,7 @@
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Wifi Name" minimumFontSize="17" clearButtonMode="unlessEditing" translatesAutoresizingMaskIntoConstraints="NO" id="4Ej-QS-qa2">
                                                     <rect key="frame" x="0.0" y="0.0" width="354" height="60"/>
+                                                    <color key="backgroundColor" name="Yelo"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="60" id="qk4-tE-jTF"/>
                                                     </constraints>
@@ -96,6 +97,7 @@
                                                 </textField>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" clearButtonMode="unlessEditing" translatesAutoresizingMaskIntoConstraints="NO" id="gVs-O3-Q8W">
                                                     <rect key="frame" x="0.0" y="70" width="354" height="60"/>
+                                                    <color key="backgroundColor" name="Yelo"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
                                                 </textField>

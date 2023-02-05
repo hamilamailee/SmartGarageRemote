@@ -52,16 +52,6 @@ class WifiViewController: UIViewController, CLLocationManagerDelegate, UITextFie
         connectDeviceDescLabel.text = (connectDeviceDescLabel.text ?? "Connect to ") + "test2"
     }
     
-//    private func setupWifiName() {
-//        let status = CLLocationManager.authorizationStatus()
-//        if status == .authorizedWhenInUse {
-//            updateWiFi()
-//        } else {
-//            locationManager.delegate = self
-//            locationManager.requestWhenInUseAuthorization()
-//        }
-//    }
-//
     
     private func updateWiFi() {
         print("SSID: \(currentNetworkInfos?.first?.ssid ?? "")")
@@ -135,8 +125,7 @@ class WifiViewController: UIViewController, CLLocationManagerDelegate, UITextFie
                 // create json object from data or use JSONDecoder to convert to Model stuct
                 if let jsonResponse = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers) as? [String: Any] {
                     print(jsonResponse)
-                    
-                    // handle json response
+                    self.showToast(message: String(describing: jsonResponse))
                 } else {
                     print("data maybe corrupted or in wrong format")
                     throw URLError(.badServerResponse)

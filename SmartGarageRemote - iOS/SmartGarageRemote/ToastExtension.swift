@@ -9,11 +9,11 @@ import UIKit
 
 extension UIViewController {
 
-    func showToast(message : String, font: UIFont = .systemFont(ofSize: UIFont.systemFontSize), isError: Bool = false) {
+    func showToast(message : String, font: UIFont = .systemFont(ofSize: UIFont.systemFontSize * 1.5), isError: Bool = false) {
 
-        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
-        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        toastLabel.textColor = isError ? UIColor.red : UIColor.white
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 100, y: self.view.frame.size.height-100, width: 200, height: 50))
+        toastLabel.backgroundColor = isError ? .red.withAlphaComponent(0.8) : .black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
         toastLabel.font = font
         toastLabel.textAlignment = .center;
         toastLabel.text = message

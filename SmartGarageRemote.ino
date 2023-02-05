@@ -7,6 +7,8 @@
 #include <AsyncElegantOTA.h>;
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include <RCSwitch.h>
+#include <Preferences.h>
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -26,6 +28,11 @@ bool has_ssid_pass_really = true;
 bool connected_to_wifi = false;
 bool connected_to_mqtt = false;
 
+RCSwitch receiver = RCSwitch();
+RCSwitch transmitter = RCSwitch();
+
+Preferences preferences;
+
 const char *ACCESS_POINT_SSID = "parking_remote";
 const char *ACCESS_POINT_PASS = "testtest";
 IPAddress local_ip(192, 168, 1, 1);
@@ -33,11 +40,13 @@ IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 AsyncWebServer server(8080);
 
-int doorPin = D0;
-int checkPin = D1;
 
-long startTime = 0;
-long lastMetricSent = 0;
+int state = 0;
+// 0 => normal (nothing)
+// 1 => learn
+// 2 => transmit
+int selectedId = 0;
+
 
 void setup()
 {
@@ -48,8 +57,14 @@ void setup()
   //  setupAP();
   //  setupServer();
   connectToWifi();
-  pinMode(doorPin, OUTPUT);
-  pinMode(checkPin, OUTPUT);
+
+  receiver.enableReceive(0);
+  transmitter.enableTransmit(4);
+  transmitter.setProtocol(1);
+  transmitter.setPulseLength(350);
+
+  preferences.begin("my-app", false);
+  
   Serial.println("Setup done");
 }
 
@@ -117,9 +132,14 @@ void callback(char *topic, byte *payload, unsigned int length)
   Serial.println("learn");
   int id = data["id"];
   if (strcmp(mode, "learn") == 0) {
-    learn(id);
-  } else {
-    operate(id);
+    selectedId = id;
+    state = 1;
+  } else if (strcmp(mode, "transmit") == 0) {
+    selectedId = id;
+    state = 2;
+  } else { // cancel
+    state = 0;
+    selectedId = 0;
   }
   return;
 }
@@ -224,31 +244,80 @@ void setupServer()
   Serial.println("Setup server done");
 }
 
-void learn(int id)
+static char * dec2binWzerofill(unsigned long Dec, unsigned int bitLength) {
+  static char bin[64]; 
+  unsigned int i=0;
+
+  while (Dec > 0) {
+    bin[32+i++] = ((Dec & 1) > 0) ? '1' : '0';
+    Dec = Dec >> 1;
+  }
+
+  for (unsigned int j = 0; j< bitLength; j++) {
+    if (j >= bitLength - i) {
+      bin[j] = bin[ 31 + i - (j - (bitLength - i)) ];
+    } else {
+      bin[j] = '0';
+    }
+  }
+  bin[bitLength] = '\0';
+  
+  return bin;
+}
+
+void learn()
 {
   Serial.print("Learning for id = ");
-  Serial.println(id);
-  if (id < 1 || id > 5) {
+  Serial.println(selectedId);
+  if (selectedId < 1 || selectedId > 5) {
     sendError("id must be between 1 and 5");
   } else {
-    // TODO: do the actual learning
+    // do the actual learning
+    if (receiver.available()) {
+    int value = receiver.getReceivedValue();
+    if (value == 0) {
+      Serial.print("Unknown encoding");
+    } else {
+      unsigned long receivedValue = receiver.getReceivedValue();
+      unsigned int bitLength = receiver.getReceivedBitlength();
+      unsigned int protocol = receiver.getReceivedProtocol();
+      Serial.print("Received ");
+      Serial.print( receivedValue );
+      Serial.print(" / ");
+      Serial.print( bitLength );
+      Serial.print("bit ");
+      Serial.print("Protocol: ");
+      Serial.println(protocol);
+
+      char *intStr = itoa(selectedId);
+      string str = string(intStr);
+      const char* binValue = dec2binWzerofill(receivedValue, bitLength);
+      preferences.putChar(str, binValue);
+      preferences.
+    }
+    receiver.resetAvailable();
+    state = 1;
+  }
+    
     // TODO: save in memory
     sendMessage("Learned");
   }
+  state = 0;
 }
 
-void operate(int id)
+void transmit()
 {
   Serial.print("Transmitting for id = ");
-  Serial.println(id);
+  Serial.println(selectedId);
 
-  if (id < 1 || id > 5) {
+  if (selectedId < 1 || selectedId > 5) {
     sendError("id must be between 1 and 5");
   } else {
     // TODO: read from memory
     // TODO: do the actual transmitting
     sendMessage("Sent");
   }
+  state = 0;
 }
 
 void loop()
@@ -271,4 +340,17 @@ void loop()
     Serial.println("mqtt disconnected");
     connected_to_mqtt = false;
   }
+
+  Serial.println(state);
+
+  if (state == 0) {
+    // nothing yet
+  } else if (state == 1) { // learn
+    learn();
+  } else if (state == 2) {
+    transmit();
+  } else {
+    state = 0;
+  }
+  
 }
