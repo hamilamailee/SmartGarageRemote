@@ -7,43 +7,56 @@
 #include <AsyncElegantOTA.h>;
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include <RCSwitch.h>
+#include <Preferences.h>
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 char *device_id;
+char *access_token;
 char *PUB_TOPIC = "/garage";
-char *pub_topic = (char *)malloc(128);
 char *MQTT_HOST = "addd6ec8.us-east-1.emqx.cloud";
 int MQTT_PORT = 15345;
-char *mqttUsername = "arduino";
+char *mqttUsername = "arduinoKey";
 char *mqttPassword = "arduino";
 
-char *ssid = "FINAPPLE";
-char *pass = "dooodeee";
-bool has_ssid_pass = true;
-bool has_ssid_pass_really = true;
+String ssid = "NULL";
+String pass = "NULL";
 bool connected_to_wifi = false;
 bool connected_to_mqtt = false;
 
-int keyPin = D1;
-int lightPin = D2;
-int signalId = 1;
+RCSwitch receiver = RCSwitch();
+RCSwitch transmitter = RCSwitch();
 
-const char *ACCESS_POINT_SSID = "parking_remote_key";
+Preferences preferences;
+
+const char *ACCESS_POINT_SSID = "parking_remote";
 const char *ACCESS_POINT_PASS = "testtest";
 IPAddress local_ip(192, 168, 1, 1);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 AsyncWebServer server(8080);
 
+
+int selectedId = 1;
+
+int resetButtonPin = D0;
+int theKeyPin = D1;
+
 void setup()
 {
   ESP.eraseConfig();
   Serial.begin(9600);
   delay(10);
-  connectToWifi();
-  pinMode(keyPin, INPUT);
-  pinMode(lightPin, OUTPUT);
+  Serial.println("V1.0");
+  setupAP();
+  setupServer();
+
+  preferences.begin("my-app", false);
+
+  pinMode(resetButtonPin, INPUT);
+  pinMode(theKeyPin, INPUT);
+  
   Serial.println("Setup done");
 }
 
@@ -55,11 +68,27 @@ void setupAP()
   Serial.print("Setup AP ");
   Serial.println(WiFi.softAP(ACCESS_POINT_SSID, ACCESS_POINT_PASS) ? "Successful" : "Failed!");
   IPAddress IP = WiFi.softAPIP();
-  Serial.println("Access point setup done");
+  Serial.print("AP IP address");
+  Serial.println(IP);
+  Serial.println("Setup wifi done");
+  Serial.println(getCharArrayFromString(WiFi.macAddress()));
+  Serial.println();
+  access_token = device_id = getCharArrayFromString(WiFi.macAddress());
 }
 
 bool connectToWifi()
 {
+  if (WiFi.status() == WL_CONNECTED) {
+    return true;
+  }
+
+  ssid = preferences.getString("ssid", "NULL");
+  pass = preferences.getString("pass", "NULL");
+
+  if (ssid == "NULL" || pass == "NULL") {
+    return false;
+  }
+
   Serial.printf("connecting to %s %s\n", ssid, pass);
   WiFi.begin(ssid, pass);
   int i = 0;
@@ -70,7 +99,6 @@ bool connectToWifi()
     {
       Serial.println("Failed to connect");
       WiFi.disconnect();
-      has_ssid_pass = has_ssid_pass_really;
       return false;
     }
   }
@@ -82,9 +110,11 @@ bool connectToWifi()
   Serial.print("IP address:\t");
   Serial.println(WiFi.localIP());
   device_id = getCharArrayFromString(WiFi.macAddress());
+  access_token = device_id;
   Serial.printf("MacAddress: %s\n", device_id);
   return true;
 }
+
 
 bool connectToMqtt()
 {
@@ -98,15 +128,15 @@ bool connectToMqtt()
   return true;
 }
 
-void sendCommand(int id)
+void sendMessage()
 {
   DynamicJsonDocument doc(2048);
   doc["mode"] = "transmit";
-  doc["id"] = id;
+  doc["id"] = selectedId;
   char buf[2048];
   serializeJson(doc, buf);
   client.publish(PUB_TOPIC, buf);
-  Serial.println("Sent command");
+  Serial.println("Sent message");
 }
 
 
@@ -120,18 +150,32 @@ char *getCharArrayFromString(String str)
 
 void setupServer()
 {
+  server.on("/ping", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send(200, "text/plain", "PONG");
+  });
+
   server.on("/connect", HTTP_POST, [](AsyncWebServerRequest * request)
   {
     if (request->hasArg("ssid") && request->hasArg("pass") && request->arg("ssid") != NULL && request->arg("pass") != NULL) {
-      ssid = getCharArrayFromString(request->arg("ssid"));
-      pass = getCharArrayFromString(request->arg("pass"));
+
+      ssid = request->arg("ssid");
+      pass = request->arg("pass");
+      preferences.putString("ssid", ssid);
+      preferences.putString("pass", pass);
+      Serial.print("Got ssid: ");
+      Serial.println(ssid);
+      Serial.print("Got password: ");
+      Serial.println(pass);
       char* data = (char*)malloc(1024);
       data[0] = '\0';
-      strcat(data, "Got wifi info!\0");
+      strcat(data, "{\"device_id\":\"");
+      strcat(data, device_id);
+      strcat(data, "\",\"access_token\":\"");
+      strcat(data, access_token);
+      strcat(data, "\"}");
       request->send(200, "text/plain", data);
-      has_ssid_pass = true;
       connected_to_wifi = false;
-      has_ssid_pass_really = true;
       free(data);
     } else {
       request->send(400, "text/plain", "Bad args");
@@ -164,15 +208,33 @@ void setupServer()
 }
 
 
+void checkForResetButton()
+{
+  if (digitalRead(resetButtonPin) == HIGH) {
+    // reset network info
+    Serial.println("Resetting");
+    preferences.remove("ssid");
+    preferences.remove("pass");
+    WiFi.disconnect();
+    setupAP();     
+  }
+}
+
+void checkForButton()
+{
+  if (digitalRead(resetButtonPin) == HIGH) {
+    sendMessage();
+  } 
+}
+
 void loop()
 {
+  checkForResetButton();
+  
   client.loop();
 
-  if (has_ssid_pass)
-  {
-    connected_to_wifi = connectToWifi();
-    has_ssid_pass = false;
-  }
+  connected_to_wifi = connectToWifi();
+
   if (connected_to_wifi && !connected_to_mqtt)
   {
     Serial.println("Connecting to mqtt");
@@ -185,12 +247,5 @@ void loop()
     connected_to_mqtt = false;
   }
 
-  if (digitalRead(keyPin) == HIGH) {
-    Serial.println("Transmission begin");
-    sendCommand(signalId);
-    digitalWrite(lightPin, HIGH);
-    delay(1000);
-    digitalWrite(lightPin, LOW);
-    Serial.println("Transmission complete");
-  }
+  checkForButton();
 }
