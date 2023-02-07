@@ -37,6 +37,7 @@ IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 AsyncWebServer server(8080);
 
+
 int selectedId = 1;
 
 int resetButtonPin = D0;
@@ -55,7 +56,7 @@ void setup()
 
   pinMode(resetButtonPin, INPUT);
   pinMode(theKeyPin, INPUT);
-
+  
   Serial.println("Setup done");
 }
 
@@ -77,16 +78,14 @@ void setupAP()
 
 bool connectToWifi()
 {
-  if (WiFi.status() == WL_CONNECTED)
-  {
+  if (WiFi.status() == WL_CONNECTED) {
     return true;
   }
 
   ssid = preferences.getString("ssid", "NULL");
   pass = preferences.getString("pass", "NULL");
 
-  if (ssid == "NULL" || pass == "NULL")
-  {
+  if (ssid == "NULL" || pass == "NULL") {
     return false;
   }
 
@@ -116,6 +115,7 @@ bool connectToWifi()
   return true;
 }
 
+
 bool connectToMqtt()
 {
   client.setServer(MQTT_HOST, MQTT_PORT);
@@ -139,6 +139,7 @@ void sendMessage()
   Serial.println("Sent message");
 }
 
+
 char *getCharArrayFromString(String str)
 {
   int str_len = str.length() + 1;
@@ -149,11 +150,13 @@ char *getCharArrayFromString(String str)
 
 void setupServer()
 {
-  server.on("/ping", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(200, "text/plain", "PONG"); });
+  server.on("/ping", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send(200, "text/plain", "PONG");
+  });
 
-  server.on("/connect", HTTP_POST, [](AsyncWebServerRequest *request)
-            {
+  server.on("/connect", HTTP_POST, [](AsyncWebServerRequest * request)
+  {
     if (request->hasArg("ssid") && request->hasArg("pass") && request->arg("ssid") != NULL && request->arg("pass") != NULL) {
 
       ssid = request->arg("ssid");
@@ -176,9 +179,10 @@ void setupServer()
       free(data);
     } else {
       request->send(400, "text/plain", "Bad args");
-    } });
-  server.on("/status", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
+    }
+  });
+  server.on("/status", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
     DynamicJsonDocument doc(2048);
     doc["last_ssid"] = ssid;
     doc["connected_to_wifi"] = connected_to_wifi;
@@ -186,11 +190,16 @@ void setupServer()
     doc["wifi_status"] = WiFi.status();
     char Buf[2048];
     serializeJson(doc, Buf);
-    request->send(200, "text/plain", Buf); });
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(200, "text/plain", "Hi! I am ESP8266."); });
-  server.onNotFound([](AsyncWebServerRequest *request)
-                    { request->send(404, "text/plain", "404: Not found"); });
+    request->send(200, "text/plain", Buf);
+  });
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send(200, "text/plain", "Hi! I am ESP8266.");
+  });
+  server.onNotFound([](AsyncWebServerRequest * request)
+  {
+    request->send(404, "text/plain", "404: Not found");
+  });
 
   AsyncElegantOTA.begin(&server);
 
@@ -198,31 +207,30 @@ void setupServer()
   Serial.println("Setup server done");
 }
 
+
 void checkForResetButton()
 {
-  if (digitalRead(resetButtonPin) == HIGH)
-  {
+  if (digitalRead(resetButtonPin) == HIGH) {
     // reset network info
     Serial.println("Resetting");
     preferences.remove("ssid");
     preferences.remove("pass");
     WiFi.disconnect();
-    setupAP();
+    setupAP();     
   }
 }
 
 void checkForButton()
 {
-  if (digitalRead(theKeyPin) == HIGH)
-  {
+  if (digitalRead(theKeyButton) == HIGH) {
     sendMessage();
-  }
+  } 
 }
 
 void loop()
 {
   checkForResetButton();
-
+  
   client.loop();
 
   connected_to_wifi = connectToWifi();
