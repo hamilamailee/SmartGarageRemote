@@ -1,0 +1,459 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		004CE67C298E607D00837AAD /* MQTTHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CE67B298E607D00837AAD /* MQTTHandler.swift */; };
+		004CE67E298E7F9B00837AAD /* MqttMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CE67D298E7F9B00837AAD /* MqttMessage.swift */; };
+		004CE680298EB08000837AAD /* ToastExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CE67F298EB08000837AAD /* ToastExtension.swift */; };
+		00F5E5C9298D9921002EEDDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5E5C8298D9921002EEDDE /* AppDelegate.swift */; };
+		00F5E5CB298D9921002EEDDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5E5CA298D9921002EEDDE /* SceneDelegate.swift */; };
+		00F5E5CD298D9921002EEDDE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5E5CC298D9921002EEDDE /* ViewController.swift */; };
+		00F5E5D0298D9921002EEDDE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00F5E5CE298D9921002EEDDE /* Main.storyboard */; };
+		00F5E5D2298D9923002EEDDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00F5E5D1298D9923002EEDDE /* Assets.xcassets */; };
+		00F5E5D5298D9923002EEDDE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00F5E5D3298D9923002EEDDE /* LaunchScreen.storyboard */; };
+		00F5E5DE298DB417002EEDDE /* WifiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5E5DC298DB417002EEDDE /* WifiViewController.swift */; };
+		00F5E5DF298DB417002EEDDE /* WifiViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00F5E5DD298DB417002EEDDE /* WifiViewController.xib */; };
+		0AA1E03AD275E3A20C9D6994 /* Pods_SmartGarageRemote.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 290715531740E2CFD9BD4A4C /* Pods_SmartGarageRemote.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		004CE67B298E607D00837AAD /* MQTTHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MQTTHandler.swift; sourceTree = "<group>"; };
+		004CE67D298E7F9B00837AAD /* MqttMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MqttMessage.swift; sourceTree = "<group>"; };
+		004CE67F298EB08000837AAD /* ToastExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastExtension.swift; sourceTree = "<group>"; };
+		00F5E5C5298D9921002EEDDE /* SmartGarageRemote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartGarageRemote.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00F5E5C8298D9921002EEDDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		00F5E5CA298D9921002EEDDE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		00F5E5CC298D9921002EEDDE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		00F5E5CF298D9921002EEDDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		00F5E5D1298D9923002EEDDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		00F5E5D4298D9923002EEDDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		00F5E5D6298D9923002EEDDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00F5E5DC298DB417002EEDDE /* WifiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiViewController.swift; sourceTree = "<group>"; };
+		00F5E5DD298DB417002EEDDE /* WifiViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WifiViewController.xib; sourceTree = "<group>"; };
+		290715531740E2CFD9BD4A4C /* Pods_SmartGarageRemote.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartGarageRemote.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE3D34ACFB6B91970D3C2FA8 /* Pods-SmartGarageRemote.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartGarageRemote.release.xcconfig"; path = "Target Support Files/Pods-SmartGarageRemote/Pods-SmartGarageRemote.release.xcconfig"; sourceTree = "<group>"; };
+		DE571677C5B2CB263DF14AFF /* Pods-SmartGarageRemote.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartGarageRemote.debug.xcconfig"; path = "Target Support Files/Pods-SmartGarageRemote/Pods-SmartGarageRemote.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		00F5E5C2298D9921002EEDDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0AA1E03AD275E3A20C9D6994 /* Pods_SmartGarageRemote.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00F5E5BC298D9921002EEDDE = {
+			isa = PBXGroup;
+			children = (
+				00F5E5C7298D9921002EEDDE /* SmartGarageRemote */,
+				00F5E5C6298D9921002EEDDE /* Products */,
+				D0504A24B2F2154046DE016C /* Pods */,
+				07D687B9AEE17BC27B29C527 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		00F5E5C6298D9921002EEDDE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00F5E5C5298D9921002EEDDE /* SmartGarageRemote.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		00F5E5C7298D9921002EEDDE /* SmartGarageRemote */ = {
+			isa = PBXGroup;
+			children = (
+				00F5E5C8298D9921002EEDDE /* AppDelegate.swift */,
+				00F5E5CA298D9921002EEDDE /* SceneDelegate.swift */,
+				00F5E5CC298D9921002EEDDE /* ViewController.swift */,
+				004CE67F298EB08000837AAD /* ToastExtension.swift */,
+				004CE67D298E7F9B00837AAD /* MqttMessage.swift */,
+				00F5E5CE298D9921002EEDDE /* Main.storyboard */,
+				00F5E5D1298D9923002EEDDE /* Assets.xcassets */,
+				00F5E5D3298D9923002EEDDE /* LaunchScreen.storyboard */,
+				00F5E5D6298D9923002EEDDE /* Info.plist */,
+				00F5E5DC298DB417002EEDDE /* WifiViewController.swift */,
+				00F5E5DD298DB417002EEDDE /* WifiViewController.xib */,
+				004CE67B298E607D00837AAD /* MQTTHandler.swift */,
+			);
+			path = SmartGarageRemote;
+			sourceTree = "<group>";
+		};
+		07D687B9AEE17BC27B29C527 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				290715531740E2CFD9BD4A4C /* Pods_SmartGarageRemote.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D0504A24B2F2154046DE016C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DE571677C5B2CB263DF14AFF /* Pods-SmartGarageRemote.debug.xcconfig */,
+				CE3D34ACFB6B91970D3C2FA8 /* Pods-SmartGarageRemote.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		00F5E5C4298D9921002EEDDE /* SmartGarageRemote */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00F5E5D9298D9923002EEDDE /* Build configuration list for PBXNativeTarget "SmartGarageRemote" */;
+			buildPhases = (
+				84ED9D409CF7A291692E959D /* [CP] Check Pods Manifest.lock */,
+				00F5E5C1298D9921002EEDDE /* Sources */,
+				00F5E5C2298D9921002EEDDE /* Frameworks */,
+				00F5E5C3298D9921002EEDDE /* Resources */,
+				C0B6F886F724BF8D7B9187A3 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SmartGarageRemote;
+			productName = SmartGarageRemote;
+			productReference = 00F5E5C5298D9921002EEDDE /* SmartGarageRemote.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		00F5E5BD298D9921002EEDDE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					00F5E5C4298D9921002EEDDE = {
+						CreatedOnToolsVersion = 14.2;
+					};
+				};
+			};
+			buildConfigurationList = 00F5E5C0298D9921002EEDDE /* Build configuration list for PBXProject "SmartGarageRemote" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 00F5E5BC298D9921002EEDDE;
+			productRefGroup = 00F5E5C6298D9921002EEDDE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				00F5E5C4298D9921002EEDDE /* SmartGarageRemote */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00F5E5C3298D9921002EEDDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00F5E5D5298D9923002EEDDE /* LaunchScreen.storyboard in Resources */,
+				00F5E5DF298DB417002EEDDE /* WifiViewController.xib in Resources */,
+				00F5E5D2298D9923002EEDDE /* Assets.xcassets in Resources */,
+				00F5E5D0298D9921002EEDDE /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		84ED9D409CF7A291692E959D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SmartGarageRemote-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C0B6F886F724BF8D7B9187A3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SmartGarageRemote/Pods-SmartGarageRemote-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SmartGarageRemote/Pods-SmartGarageRemote-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartGarageRemote/Pods-SmartGarageRemote-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00F5E5C1298D9921002EEDDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00F5E5CD298D9921002EEDDE /* ViewController.swift in Sources */,
+				00F5E5DE298DB417002EEDDE /* WifiViewController.swift in Sources */,
+				00F5E5C9298D9921002EEDDE /* AppDelegate.swift in Sources */,
+				004CE67C298E607D00837AAD /* MQTTHandler.swift in Sources */,
+				00F5E5CB298D9921002EEDDE /* SceneDelegate.swift in Sources */,
+				004CE67E298E7F9B00837AAD /* MqttMessage.swift in Sources */,
+				004CE680298EB08000837AAD /* ToastExtension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		00F5E5CE298D9921002EEDDE /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				00F5E5CF298D9921002EEDDE /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		00F5E5D3298D9923002EEDDE /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				00F5E5D4298D9923002EEDDE /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		00F5E5D7298D9923002EEDDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		00F5E5D8298D9923002EEDDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		00F5E5DA298D9923002EEDDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DE571677C5B2CB263DF14AFF /* Pods-SmartGarageRemote.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HPWS726989;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SmartGarageRemote/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saee.SmartGarageRemote;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		00F5E5DB298D9923002EEDDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CE3D34ACFB6B91970D3C2FA8 /* Pods-SmartGarageRemote.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HPWS726989;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SmartGarageRemote/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saee.SmartGarageRemote;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00F5E5C0298D9921002EEDDE /* Build configuration list for PBXProject "SmartGarageRemote" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00F5E5D7298D9923002EEDDE /* Debug */,
+				00F5E5D8298D9923002EEDDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00F5E5D9298D9923002EEDDE /* Build configuration list for PBXNativeTarget "SmartGarageRemote" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00F5E5DA298D9923002EEDDE /* Debug */,
+				00F5E5DB298D9923002EEDDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 00F5E5BD298D9921002EEDDE /* Project object */;
+}

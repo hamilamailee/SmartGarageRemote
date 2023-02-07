@@ -14,11 +14,10 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 char *device_id;
 char *access_token;
-char *SUB_TOPIC = "/garage";
-char *PUB_TOPIC = "/messages";
+char *PUB_TOPIC = "/garage";
 char *MQTT_HOST = "addd6ec8.us-east-1.emqx.cloud";
 int MQTT_PORT = 15345;
-char *mqttUsername = "arduino";
+char *mqttUsername = "arduinoKey";
 char *mqttPassword = "arduino";
 
 String ssid = "NULL";
@@ -39,13 +38,10 @@ IPAddress subnet(255, 255, 255, 0);
 AsyncWebServer server(8080);
 
 
-int state = 0;
-// 0 => normal (nothing)
-// 1 => learn
-// 2 => transmit
-int selectedId = 0;
+int selectedId = 1;
 
 int resetButtonPin = D0;
+int theKeyPin = D1;
 
 void setup()
 {
@@ -56,18 +52,10 @@ void setup()
   setupAP();
   setupServer();
 
-  receiver.enableReceive(0);
-  transmitter.enableTransmit(4);
-  transmitter.setProtocol(1);
-  transmitter.setPulseLength(350);
-  transmitter.setRepeatTransmit(20);
-
   preferences.begin("my-app", false);
 
-  ssid = preferences.getString("ssid", "NULL");
-  pass = preferences.getString("password", "NULL");
-
   pinMode(resetButtonPin, INPUT);
+  pinMode(theKeyPin, INPUT);
   
   Serial.println("Setup done");
 }
@@ -96,11 +84,6 @@ bool connectToWifi()
 
   ssid = preferences.getString("ssid", "NULL");
   pass = preferences.getString("pass", "NULL");
-
-//  Serial.print("read ssid from memory: ");
-//  Serial.println(ssid);
-//  Serial.print("and password");
-//  Serial.println(pass);
 
   if (ssid == "NULL" || pass == "NULL") {
     return false;
@@ -132,64 +115,24 @@ bool connectToWifi()
   return true;
 }
 
-void callback(char *topic, byte *payload, unsigned int length)
-{
-  Serial.printf("Call back %s %s \n", topic, payload);
-  DynamicJsonDocument data(length + 10);
-  DeserializationError err = deserializeJson(data, payload);
-  if (err)
-  {
-    Serial.print(("deserializeJson() failed: "));
-  }
-  if (!data.containsKey("mode") || !data.containsKey("id")) {
-    sendError("Invalid json received thus ignored");
-  }
-  const char* mode = data["mode"];
-  int id = data["id"];
-  if (strcmp(mode, "learn") == 0) {
-    selectedId = id;
-    state = 1;
-  } else if (strcmp(mode, "transmit") == 0) {
-    selectedId = id;
-    state = 2;
-  } else { // cancel
-    state = 0;
-    selectedId = 0;
-  }
-  return;
-}
 
 bool connectToMqtt()
 {
   client.setServer(MQTT_HOST, MQTT_PORT);
-  client.setCallback(callback);
   if (!client.connect(device_id, mqttUsername, mqttPassword))
   {
     Serial.println("Failed to connect to mqtt!");
     delay(1000);
     return false;
   }
-  client.subscribe(SUB_TOPIC);
-  //  Serial.println("Connected to mqtt");
   return true;
 }
 
-void sendMessage(char* message)
+void sendMessage()
 {
   DynamicJsonDocument doc(2048);
-  doc["mode"] = "message";
-  doc["message"] = message;
-  char buf[2048];
-  serializeJson(doc, buf);
-  client.publish(PUB_TOPIC, buf);
-  Serial.println("Sent message");
-}
-
-void sendError(char* message)
-{
-  DynamicJsonDocument doc(2048);
-  doc["mode"] = "error";
-  doc["message"] = message;
+  doc["mode"] = "transmit";
+  doc["id"] = selectedId;
   char buf[2048];
   serializeJson(doc, buf);
   client.publish(PUB_TOPIC, buf);
@@ -265,73 +208,6 @@ void setupServer()
 }
 
 
-void learn()
-{
-  Serial.print("Learning for id = ");
-  Serial.println(selectedId);
-  if (selectedId < 1 || selectedId > 5) {
-    sendError("id must be between 1 and 5");
-  } else {
-    // do the actual learning
-    if (receiver.available()) {
-      int value = receiver.getReceivedValue();
-      if (value == 0) {
-        Serial.print("Unknown encoding");
-      } else {
-        unsigned long receivedValue = receiver.getReceivedValue();
-        unsigned int bitLength = receiver.getReceivedBitlength();
-        unsigned int protocol = receiver.getReceivedProtocol();
-        Serial.print("Received ");
-        Serial.print( receivedValue );
-        Serial.print(" / ");
-        Serial.print( bitLength );
-        Serial.print("bit ");
-        Serial.print("Protocol: ");
-        Serial.println(protocol);
-
-        // persist in memory
-        char key[10];
-        sprintf(key, "value%d", selectedId);
-        preferences.putULong(key, receivedValue);
-
-        sprintf(key, "bitLength%d", selectedId);
-        preferences.putUInt(key, bitLength);
-
-        Serial.println("Learning complete");
-        sendMessage("Learned");
-        state = 0;
-      }
-      receiver.resetAvailable();
-    }
-  }
-}
-
-void transmit()
-{
-  Serial.print("Transmitting for id = ");
-  Serial.println(selectedId);
-
-  if (selectedId < 1 || selectedId > 5) {
-    sendError("id must be between 1 and 5");
-  } else {
-    char key[10];
-    sprintf(key, "value%d", selectedId);
-    unsigned long value = preferences.getULong(key, 0);
-    sprintf(key, "bitLength%d", selectedId);
-    unsigned int bitLength = preferences.getUInt(key, 0);
-
-    Serial.print("Read values from memory -> value: ");
-    Serial.print(value);
-    Serial.print(" , bitLength: ");
-    Serial.println(bitLength);
-
-    transmitter.send(value, bitLength);
-    Serial.println("Transmitted");
-    sendMessage("Sent");
-  }
-  state = 0;
-}
-
 void checkForResetButton()
 {
   if (digitalRead(resetButtonPin) == HIGH) {
@@ -342,6 +218,13 @@ void checkForResetButton()
     WiFi.disconnect();
     setupAP();     
   }
+}
+
+void checkForButton()
+{
+  if (digitalRead(resetButtonPin) == HIGH) {
+    sendMessage();
+  } 
 }
 
 void loop()
@@ -364,15 +247,5 @@ void loop()
     connected_to_mqtt = false;
   }
 
-
-  if (state == 0) {
-    // nothing yet
-  } else if (state == 1) { // learn
-    learn();
-  } else if (state == 2) {
-    transmit();
-  } else {
-    state = 0;
-  }
-
+  checkForButton();
 }

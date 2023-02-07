@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WifiViewController" customModule="SmartGarageRemote" customModuleProvider="target">
+            <connections>
+                <outlet property="connectDeviceButton" destination="4bK-zl-O3s" id="14W-vb-x5L"/>
+                <outlet property="connectDeviceCard" destination="vAn-gH-7sk" id="zS4-zy-DWw"/>
+                <outlet property="connectDeviceDescLabel" destination="SY4-7z-4NA" id="Aly-xP-HPO"/>
+                <outlet property="connectDeviceLabel" destination="tse-2u-0lY" id="h7k-6z-v3U"/>
+                <outlet property="connectWifiButton" destination="7yu-Yd-ixS" id="m3e-31-Xvu"/>
+                <outlet property="connectWifiCard" destination="hgC-rW-9cI" id="Cc4-IU-yBg"/>
+                <outlet property="view" destination="IoM-vl-wxP" id="Csr-wV-rrv"/>
+                <outlet property="wifiNameTextfield" destination="4Ej-QS-qa2" id="vad-v6-8IX"/>
+                <outlet property="wifiPasswordTextField" destination="gVs-O3-Q8W" id="79a-ab-J83"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" restorationIdentifier="WifiViewController" id="IoM-vl-wxP">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pBs-0Q-3xo">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="abI-yK-u3O">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="578.33333333333337"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vAn-gH-7sk">
+                                    <rect key="frame" x="20" y="60.000000000000014" width="374" height="158.33333333333337"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect to your device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tse-2u-0lY">
+                                            <rect key="frame" x="81.333333333333329" y="10" width="211.33333333333337" height="30"/>
+                                            <fontDescription key="fontDescription" name="DINCondensed-Bold" family="DIN Condensed" pointSize="30"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bK-zl-O3s">
+                                            <rect key="frame" x="81.333333333333329" y="92.333333333333343" width="211.33333333333337" height="50"/>
+                                            <color key="backgroundColor" name="Yelo"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="50" id="1Fa-IG-j9E"/>
+                                            </constraints>
+                                            <color key="tintColor" systemColor="labelColor"/>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain" title="Connect">
+                                                <fontDescription key="titleFontDescription" type="system" pointSize="18"/>
+                                            </buttonConfiguration>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please connect to " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SY4-7z-4NA">
+                                            <rect key="frame" x="116.66666666666667" y="52" width="140.66666666666663" height="20.333333333333329"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="4bK-zl-O3s" firstAttribute="width" secondItem="tse-2u-0lY" secondAttribute="width" id="3Vl-iH-ex3"/>
+                                        <constraint firstAttribute="bottom" secondItem="4bK-zl-O3s" secondAttribute="bottom" constant="16" id="TqB-7v-6j2"/>
+                                        <constraint firstItem="4bK-zl-O3s" firstAttribute="centerX" secondItem="tse-2u-0lY" secondAttribute="centerX" id="Wob-Pg-40h"/>
+                                        <constraint firstItem="SY4-7z-4NA" firstAttribute="centerX" secondItem="vAn-gH-7sk" secondAttribute="centerX" id="XFX-cP-vYc"/>
+                                        <constraint firstItem="SY4-7z-4NA" firstAttribute="top" secondItem="tse-2u-0lY" secondAttribute="bottom" constant="12" id="dUu-iF-8Vv"/>
+                                        <constraint firstItem="tse-2u-0lY" firstAttribute="centerX" secondItem="vAn-gH-7sk" secondAttribute="centerX" id="hOv-XU-leM"/>
+                                        <constraint firstItem="tse-2u-0lY" firstAttribute="top" secondItem="vAn-gH-7sk" secondAttribute="top" constant="10" id="nEr-Js-3Ed"/>
+                                        <constraint firstItem="4bK-zl-O3s" firstAttribute="top" secondItem="SY4-7z-4NA" secondAttribute="bottom" constant="20" id="p19-og-vf4"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hgC-rW-9cI">
+                                    <rect key="frame" x="20" y="278.33333333333331" width="374" height="279.99999999999994"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect to WiFi" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hph-86-3wI">
+                                            <rect key="frame" x="115.33333333333333" y="10" width="143.33333333333337" height="30"/>
+                                            <fontDescription key="fontDescription" name="DINCondensed-Bold" family="DIN Condensed" pointSize="30"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="wx2-4o-MPI">
+                                            <rect key="frame" x="10" y="60" width="354" height="200"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Wifi Name" minimumFontSize="17" clearButtonMode="unlessEditing" translatesAutoresizingMaskIntoConstraints="NO" id="4Ej-QS-qa2">
+                                                    <rect key="frame" x="0.0" y="0.0" width="354" height="60"/>
+                                                    <color key="backgroundColor" name="Yelo"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="60" id="qk4-tE-jTF"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="username"/>
+                                                </textField>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" clearButtonMode="unlessEditing" translatesAutoresizingMaskIntoConstraints="NO" id="gVs-O3-Q8W">
+                                                    <rect key="frame" x="0.0" y="70" width="354" height="60"/>
+                                                    <color key="backgroundColor" name="Yelo"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
+                                                </textField>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7yu-Yd-ixS">
+                                                    <rect key="frame" x="0.0" y="140" width="354" height="60"/>
+                                                    <color key="backgroundColor" name="Yelo"/>
+                                                    <color key="tintColor" name="w"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" title="Connect">
+                                                        <color key="titleColor" systemColor="labelColor"/>
+                                                    </state>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="heroID" value="I"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="connectWifiPressed:" destination="-1" eventType="touchUpInside" id="o2f-M3-nzF"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="gVs-O3-Q8W" firstAttribute="height" secondItem="4Ej-QS-qa2" secondAttribute="height" id="OLf-q6-V74"/>
+                                                <constraint firstItem="7yu-Yd-ixS" firstAttribute="height" secondItem="gVs-O3-Q8W" secondAttribute="height" id="QY6-kN-uWN"/>
+                                            </constraints>
+                                        </stackView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="Hph-86-3wI" firstAttribute="top" secondItem="hgC-rW-9cI" secondAttribute="top" constant="10" id="EC5-uh-fhc"/>
+                                        <constraint firstAttribute="trailing" secondItem="wx2-4o-MPI" secondAttribute="trailing" constant="10" id="HDu-Tg-QT3"/>
+                                        <constraint firstItem="wx2-4o-MPI" firstAttribute="leading" secondItem="hgC-rW-9cI" secondAttribute="leading" constant="10" id="I2d-tg-ObQ"/>
+                                        <constraint firstAttribute="bottom" secondItem="wx2-4o-MPI" secondAttribute="bottom" constant="20" id="RKq-1c-gNe"/>
+                                        <constraint firstItem="wx2-4o-MPI" firstAttribute="top" secondItem="Hph-86-3wI" secondAttribute="bottom" constant="20" id="itt-Ps-U1y"/>
+                                        <constraint firstItem="Hph-86-3wI" firstAttribute="centerX" secondItem="hgC-rW-9cI" secondAttribute="centerX" id="zZq-Yo-VAK"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="hgC-rW-9cI" firstAttribute="top" secondItem="vAn-gH-7sk" secondAttribute="bottom" constant="60" id="O71-tJ-89s"/>
+                                <constraint firstAttribute="trailing" secondItem="vAn-gH-7sk" secondAttribute="trailing" constant="20" id="RBZ-iV-7bG"/>
+                                <constraint firstItem="hgC-rW-9cI" firstAttribute="leading" secondItem="vAn-gH-7sk" secondAttribute="leading" id="aj1-yD-ANo"/>
+                                <constraint firstAttribute="bottom" secondItem="hgC-rW-9cI" secondAttribute="bottom" constant="20" id="kba-cI-wSe"/>
+                                <constraint firstItem="hgC-rW-9cI" firstAttribute="trailing" secondItem="vAn-gH-7sk" secondAttribute="trailing" id="uF8-r7-1l2"/>
+                                <constraint firstItem="vAn-gH-7sk" firstAttribute="top" secondItem="abI-yK-u3O" secondAttribute="top" constant="60" id="unR-Yj-7vb"/>
+                                <constraint firstItem="vAn-gH-7sk" firstAttribute="leading" secondItem="abI-yK-u3O" secondAttribute="leading" constant="20" id="wM0-sw-QEn"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="abI-yK-u3O" firstAttribute="bottom" secondItem="aMS-bi-GeY" secondAttribute="bottom" id="Jbh-kI-t4s"/>
+                        <constraint firstItem="abI-yK-u3O" firstAttribute="trailing" secondItem="aMS-bi-GeY" secondAttribute="trailing" id="NdT-jI-JOs"/>
+                        <constraint firstItem="abI-yK-u3O" firstAttribute="leading" secondItem="aMS-bi-GeY" secondAttribute="leading" id="ZVL-d0-P1X"/>
+                        <constraint firstItem="abI-yK-u3O" firstAttribute="width" secondItem="f6O-jn-Ol5" secondAttribute="width" id="lNj-mW-YgT"/>
+                        <constraint firstItem="abI-yK-u3O" firstAttribute="top" secondItem="aMS-bi-GeY" secondAttribute="top" id="ws9-bo-vOJ"/>
+                    </constraints>
+                    <viewLayoutGuide key="contentLayoutGuide" id="aMS-bi-GeY"/>
+                    <viewLayoutGuide key="frameLayoutGuide" id="f6O-jn-Ol5"/>
+                </scrollView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="WVT-Rg-Zqp"/>
+            <color key="backgroundColor" name="sky"/>
+            <constraints>
+                <constraint firstItem="WVT-Rg-Zqp" firstAttribute="trailing" secondItem="pBs-0Q-3xo" secondAttribute="trailing" id="44A-fT-W2P"/>
+                <constraint firstAttribute="bottom" secondItem="pBs-0Q-3xo" secondAttribute="bottom" id="hY2-Tl-bmx"/>
+                <constraint firstItem="pBs-0Q-3xo" firstAttribute="top" secondItem="IoM-vl-wxP" secondAttribute="top" id="qI4-aE-IvB"/>
+                <constraint firstItem="pBs-0Q-3xo" firstAttribute="leading" secondItem="WVT-Rg-Zqp" secondAttribute="leading" id="sxa-kA-rVE"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="137.68115942028987" y="139.95535714285714"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="Yelo">
+            <color red="1" green="0.87058823529411766" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sky">
+            <color red="0.82745098039215681" green="0.93725490196078431" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="w">
+            <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
