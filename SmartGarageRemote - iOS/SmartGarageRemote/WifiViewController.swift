@@ -35,7 +35,6 @@ class WifiViewController: UIViewController, CLLocationManagerDelegate, UITextFie
         super.viewDidLoad()
         
         setupView()
-//        setupWifiName()
         hideKeyboardWhenTappedAround()
     }
     
@@ -89,7 +88,7 @@ class WifiViewController: UIViewController, CLLocationManagerDelegate, UITextFie
     private func postRequest(ssid: String, pass: String, complitionHandler: @escaping (() -> Void)) {
         
 
-        let url = URL(string: "192.168.1.1/connect")!
+        let url = URL(string: "http://192.168.1.1:8080/connect")!
         let session = URLSession.shared
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -125,7 +124,9 @@ class WifiViewController: UIViewController, CLLocationManagerDelegate, UITextFie
                 // create json object from data or use JSONDecoder to convert to Model stuct
                 if let jsonResponse = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers) as? [String: Any] {
                     print(jsonResponse)
-                    self.showToast(message: String(describing: jsonResponse))
+                    DispatchQueue.main.async {
+                        self.showToast(message: "Connected")
+                    }
                 } else {
                     print("data maybe corrupted or in wrong format")
                     throw URLError(.badServerResponse)

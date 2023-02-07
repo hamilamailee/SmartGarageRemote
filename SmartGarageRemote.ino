@@ -21,10 +21,8 @@ int MQTT_PORT = 15345;
 char *mqttUsername = "arduino";
 char *mqttPassword = "arduino";
 
-char *ssid = "FINAPPLE";
-char *pass = "dooodeee";
-bool has_ssid_pass = true;
-bool has_ssid_pass_really = true;
+String ssid = "NULL";
+String pass = "NULL";
 bool connected_to_wifi = false;
 bool connected_to_mqtt = false;
 
@@ -47,6 +45,7 @@ int state = 0;
 // 2 => transmit
 int selectedId = 0;
 
+int resetButtonPin = D0;
 
 void setup()
 {
@@ -54,16 +53,21 @@ void setup()
   Serial.begin(9600);
   delay(10);
   Serial.println("V1.0");
-  //  setupAP();
-  //  setupServer();
-  connectToWifi();
+  setupAP();
+  setupServer();
 
   receiver.enableReceive(0);
   transmitter.enableTransmit(4);
   transmitter.setProtocol(1);
   transmitter.setPulseLength(350);
+  transmitter.setRepeatTransmit(20);
 
   preferences.begin("my-app", false);
+
+  ssid = preferences.getString("ssid", "NULL");
+  pass = preferences.getString("password", "NULL");
+
+  pinMode(resetButtonPin, INPUT);
   
   Serial.println("Setup done");
 }
@@ -86,6 +90,22 @@ void setupAP()
 
 bool connectToWifi()
 {
+  if (WiFi.status() == WL_CONNECTED) {
+    return true;
+  }
+
+  ssid = preferences.getString("ssid", "NULL");
+  pass = preferences.getString("pass", "NULL");
+
+//  Serial.print("read ssid from memory: ");
+//  Serial.println(ssid);
+//  Serial.print("and password");
+//  Serial.println(pass);
+
+  if (ssid == "NULL" || pass == "NULL") {
+    return false;
+  }
+
   Serial.printf("connecting to %s %s\n", ssid, pass);
   WiFi.begin(ssid, pass);
   int i = 0;
@@ -96,7 +116,6 @@ bool connectToWifi()
     {
       Serial.println("Failed to connect");
       WiFi.disconnect();
-      has_ssid_pass = has_ssid_pass_really;
       return false;
     }
   }
@@ -108,7 +127,6 @@ bool connectToWifi()
   Serial.print("IP address:\t");
   Serial.println(WiFi.localIP());
   device_id = getCharArrayFromString(WiFi.macAddress());
-  //  device_id = "A4:CF:12:F0:00:B3";
   access_token = device_id;
   Serial.printf("MacAddress: %s\n", device_id);
   return true;
@@ -127,9 +145,6 @@ void callback(char *topic, byte *payload, unsigned int length)
     sendError("Invalid json received thus ignored");
   }
   const char* mode = data["mode"];
-  Serial.println("This is the mode you sent me dude!");
-  Serial.println(mode);
-  Serial.println("learn");
   int id = data["id"];
   if (strcmp(mode, "learn") == 0) {
     selectedId = id;
@@ -200,8 +215,15 @@ void setupServer()
   server.on("/connect", HTTP_POST, [](AsyncWebServerRequest * request)
   {
     if (request->hasArg("ssid") && request->hasArg("pass") && request->arg("ssid") != NULL && request->arg("pass") != NULL) {
-      ssid = getCharArrayFromString(request->arg("ssid"));
-      pass = getCharArrayFromString(request->arg("pass"));
+
+      ssid = request->arg("ssid");
+      pass = request->arg("pass");
+      preferences.putString("ssid", ssid);
+      preferences.putString("pass", pass);
+      Serial.print("Got ssid: ");
+      Serial.println(ssid);
+      Serial.print("Got password: ");
+      Serial.println(pass);
       char* data = (char*)malloc(1024);
       data[0] = '\0';
       strcat(data, "{\"device_id\":\"");
@@ -210,9 +232,7 @@ void setupServer()
       strcat(data, access_token);
       strcat(data, "\"}");
       request->send(200, "text/plain", data);
-      has_ssid_pass = true;
       connected_to_wifi = false;
-      has_ssid_pass_really = true;
       free(data);
     } else {
       request->send(400, "text/plain", "Bad args");
@@ -244,26 +264,6 @@ void setupServer()
   Serial.println("Setup server done");
 }
 
-static char * dec2binWzerofill(unsigned long Dec, unsigned int bitLength) {
-  static char bin[64]; 
-  unsigned int i=0;
-
-  while (Dec > 0) {
-    bin[32+i++] = ((Dec & 1) > 0) ? '1' : '0';
-    Dec = Dec >> 1;
-  }
-
-  for (unsigned int j = 0; j< bitLength; j++) {
-    if (j >= bitLength - i) {
-      bin[j] = bin[ 31 + i - (j - (bitLength - i)) ];
-    } else {
-      bin[j] = '0';
-    }
-  }
-  bin[bitLength] = '\0';
-  
-  return bin;
-}
 
 void learn()
 {
@@ -274,35 +274,36 @@ void learn()
   } else {
     // do the actual learning
     if (receiver.available()) {
-    int value = receiver.getReceivedValue();
-    if (value == 0) {
-      Serial.print("Unknown encoding");
-    } else {
-      unsigned long receivedValue = receiver.getReceivedValue();
-      unsigned int bitLength = receiver.getReceivedBitlength();
-      unsigned int protocol = receiver.getReceivedProtocol();
-      Serial.print("Received ");
-      Serial.print( receivedValue );
-      Serial.print(" / ");
-      Serial.print( bitLength );
-      Serial.print("bit ");
-      Serial.print("Protocol: ");
-      Serial.println(protocol);
+      int value = receiver.getReceivedValue();
+      if (value == 0) {
+        Serial.print("Unknown encoding");
+      } else {
+        unsigned long receivedValue = receiver.getReceivedValue();
+        unsigned int bitLength = receiver.getReceivedBitlength();
+        unsigned int protocol = receiver.getReceivedProtocol();
+        Serial.print("Received ");
+        Serial.print( receivedValue );
+        Serial.print(" / ");
+        Serial.print( bitLength );
+        Serial.print("bit ");
+        Serial.print("Protocol: ");
+        Serial.println(protocol);
 
-      char *intStr = itoa(selectedId);
-      string str = string(intStr);
-      const char* binValue = dec2binWzerofill(receivedValue, bitLength);
-      preferences.putChar(str, binValue);
-      preferences.
+        // persist in memory
+        char key[10];
+        sprintf(key, "value%d", selectedId);
+        preferences.putULong(key, receivedValue);
+
+        sprintf(key, "bitLength%d", selectedId);
+        preferences.putUInt(key, bitLength);
+
+        Serial.println("Learning complete");
+        sendMessage("Learned");
+        state = 0;
+      }
+      receiver.resetAvailable();
     }
-    receiver.resetAvailable();
-    state = 1;
   }
-    
-    // TODO: save in memory
-    sendMessage("Learned");
-  }
-  state = 0;
 }
 
 void transmit()
@@ -313,22 +314,44 @@ void transmit()
   if (selectedId < 1 || selectedId > 5) {
     sendError("id must be between 1 and 5");
   } else {
-    // TODO: read from memory
-    // TODO: do the actual transmitting
+    char key[10];
+    sprintf(key, "value%d", selectedId);
+    unsigned long value = preferences.getULong(key, 0);
+    sprintf(key, "bitLength%d", selectedId);
+    unsigned int bitLength = preferences.getUInt(key, 0);
+
+    Serial.print("Read values from memory -> value: ");
+    Serial.print(value);
+    Serial.print(" , bitLength: ");
+    Serial.println(bitLength);
+
+    transmitter.send(value, bitLength);
+    Serial.println("Transmitted");
     sendMessage("Sent");
   }
   state = 0;
 }
 
+void checkForResetButton()
+{
+  if (digitalRead(resetButtonPin) == HIGH) {
+    // reset network info
+    Serial.println("Resetting");
+    preferences.remove("ssid");
+    preferences.remove("pass");
+    WiFi.disconnect();
+    setupAP();     
+  }
+}
+
 void loop()
 {
+  checkForResetButton();
+  
   client.loop();
 
-  if (has_ssid_pass)
-  {
-    connected_to_wifi = connectToWifi();
-    has_ssid_pass = false;
-  }
+  connected_to_wifi = connectToWifi();
+
   if (connected_to_wifi && !connected_to_mqtt)
   {
     Serial.println("Connecting to mqtt");
@@ -341,7 +364,6 @@ void loop()
     connected_to_mqtt = false;
   }
 
-  Serial.println(state);
 
   if (state == 0) {
     // nothing yet
@@ -352,5 +374,5 @@ void loop()
   } else {
     state = 0;
   }
-  
+
 }

@@ -16,7 +16,7 @@
                 <outlet property="connectDeviceCard" destination="vAn-gH-7sk" id="zS4-zy-DWw"/>
                 <outlet property="connectDeviceDescLabel" destination="SY4-7z-4NA" id="Aly-xP-HPO"/>
                 <outlet property="connectDeviceLabel" destination="tse-2u-0lY" id="h7k-6z-v3U"/>
-                <outlet property="connectWifiButton" destination="7yu-Yd-ixS" id="9ne-0g-Xp5"/>
+                <outlet property="connectWifiButton" destination="7yu-Yd-ixS" id="m3e-31-Xvu"/>
                 <outlet property="connectWifiCard" destination="hgC-rW-9cI" id="Cc4-IU-yBg"/>
                 <outlet property="view" destination="IoM-vl-wxP" id="Csr-wV-rrv"/>
                 <outlet property="wifiNameTextfield" destination="4Ej-QS-qa2" id="vad-v6-8IX"/>
@@ -112,6 +112,9 @@
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="heroID" value="I"/>
                                                     </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="connectWifiPressed:" destination="-1" eventType="touchUpInside" id="o2f-M3-nzF"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>

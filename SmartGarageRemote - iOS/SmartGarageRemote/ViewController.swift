@@ -124,7 +124,7 @@ class ViewController: UIViewController {
 extension ViewController: CocoaMQTT5Delegate {
     func mqtt5(_ mqtt5: CocoaMQTT5, didConnectAck ack: CocoaMQTTCONNACKReasonCode, connAckData: MqttDecodeConnAck?) {
         print("Connect Ack! \(String(describing: connAckData))")
-        mqttHandler.mqttClient.subscribe("/garage")
+        mqttHandler.mqttClient.subscribe("/messages")
     }
     
     func mqtt5(_ mqtt5: CocoaMQTT5, didPublishMessage message: CocoaMQTT5Message, id: UInt16) {
