@@ -222,7 +222,7 @@ void checkForResetButton()
 
 void checkForButton()
 {
-  if (digitalRead(resetButtonPin) == HIGH) {
+  if (digitalRead(tehKeyButton) == HIGH) {
     sendMessage();
   } 
 }
