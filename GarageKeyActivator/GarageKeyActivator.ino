@@ -30,7 +30,7 @@ RCSwitch transmitter = RCSwitch();
 
 Preferences preferences;
 
-const char *ACCESS_POINT_SSID = "parking_remote";
+const char *ACCESS_POINT_SSID = "parking_key";
 const char *ACCESS_POINT_PASS = "testtest";
 IPAddress local_ip(192, 168, 1, 1);
 IPAddress gateway(192, 168, 1, 1);
